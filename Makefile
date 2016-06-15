@@ -4,4 +4,3 @@ docker_machine_ip = $$(docker-machine ip default)
 all: test
 start:
 	@./bootstrap.sh
-	echo ${docker_machine_ip}
