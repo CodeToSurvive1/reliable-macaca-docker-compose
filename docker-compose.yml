@@ -1,7 +1,7 @@
 reliable-master:
-  container_name: "reliable_master_${RELIABLE_ENV_CONFIG}"
+  container_name: "reliable_master"
   restart: always
-  build: .
+  build: ./pre-install/reliable-master
   ports:
     - "${RELIABLE_ENV_PORT}:${RELIABLE_ENV_PORT}"
   links:
@@ -13,10 +13,10 @@ reliable-master:
     - DB_NAME=reliable_dev
   volumes:
     - /etc/localtime:/etc/localtime:ro
-  command: make serve env=${RELIABLE_ENV_CONFIG}
+  command: make serve env=prod
 
 mongo:
-  container_name: "reliable_mongo_${RELIABLE_ENV_CONFIG}"
+  container_name: "reliable_mongo"
   restart: always
   image: mongo
   volumes:
@@ -25,8 +25,17 @@ mongo:
   command: "true"
 
 redis:
-  container_name: "reliable_redis_${RELIABLE_ENV_CONFIG}"
+  container_name: "reliable_redis"
   restart: always
   image: redis
+  volumes:
+    - /etc/localtime:/etc/localtime:ro
+
+slave1:
+  container_name: "slave1"
+  restart: always
+  image: "local/reliable-macaca-slave"
+  links:
+    - reliable_master:reliable_master
   volumes:
     - /etc/localtime:/etc/localtime:ro
