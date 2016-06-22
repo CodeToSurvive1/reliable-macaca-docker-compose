@@ -1,5 +1,5 @@
 reliable-master:
-  container_name: "reliable_master"
+  container_name: "reliable-master"
   restart: "UNLESS-STOP"
   image: reliable-master
   ports:
@@ -38,14 +38,5 @@ slave_1:
     - reliable-master:reliable-master
   volumes:
     - /etc/localtime:/etc/localtime:ro
-  command: /reliable-macaca-slave/bin/reliable-macaca-slave server -m reliable-master:${RELIABLE_MASTER_PORT} --verbose
+  command: /reliable-macaca-slave/bin/reliable-macaca-slave server -m reliable-master:8083 --verbose
 
-slave_2:
-  container_name: "slave_2"
-  restart: always
-  image: "reliable-macaca-slave"
-  links:
-    - reliable-master:reliable-master
-  volumes:
-    - /etc/localtime:/etc/localtime:ro
-  command: /reliable-macaca-slave/bin/reliable-macaca-slave server -m reliable-master:${RELIABLE_MASTER_PORT} --verbose
