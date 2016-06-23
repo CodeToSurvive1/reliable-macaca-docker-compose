@@ -1,9 +1,9 @@
 reliable-master:
-  container_name: "reliable_master"
-  restart: always
-  build: ./pre-install/reliable-master
+  container_name: "reliable-master"
+  restart: "UNLESS-STOP"
+  image: reliable-master
   ports:
-    - "${RELIABLE_ENV_PORT}:${RELIABLE_ENV_PORT}"
+    - "${RELIABLE_MASTER_PORT}:${RELIABLE_MASTER_PORT}"
   links:
     - mongo:mongo
     - redis:redis
@@ -13,7 +13,7 @@ reliable-master:
     - DB_NAME=reliable_dev
   volumes:
     - /etc/localtime:/etc/localtime:ro
-  command: make serve env=prod
+  command: /reliable-master/bin/reliable-master server -p ${RELIABLE_MASTER_PORT} --verbose
 
 mongo:
   container_name: "reliable_mongo"
@@ -22,7 +22,6 @@ mongo:
   volumes:
     - /var/lib/mongo
     - /etc/localtime:/etc/localtime:ro
-  command: "true"
 
 redis:
   container_name: "reliable_redis"
@@ -31,11 +30,13 @@ redis:
   volumes:
     - /etc/localtime:/etc/localtime:ro
 
-slave1:
-  container_name: "slave1"
+slave_1:
+  container_name: "slave_1"
   restart: always
-  image: "local/reliable-macaca-slave"
+  image: "reliable-macaca-slave"
   links:
-    - reliable_master:reliable_master
+    - reliable-master:reliable-master
   volumes:
     - /etc/localtime:/etc/localtime:ro
+  command: /reliable-macaca-slave/bin/reliable-macaca-slave server -m reliable-master:8083 --verbose
+
