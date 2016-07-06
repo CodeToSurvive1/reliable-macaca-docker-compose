@@ -20,7 +20,7 @@ mongo:
   restart: always
   image: mongo
   volumes:
-    - /var/lib/mongo
+    - /var/mongo/data/db:/data/db
     - /etc/localtime:/etc/localtime:ro
 
 redis:
