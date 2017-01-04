@@ -2,4 +2,8 @@
 
 ```shell
 $ make start
+
+# or with init data
+
+$ make start-with-data
 ```

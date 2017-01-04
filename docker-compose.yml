@@ -29,14 +29,3 @@ redis:
   image: redis
   volumes:
     - /etc/localtime:/etc/localtime:ro
-
-slave_1:
-  container_name: "slave_1"
-  restart: always
-  image: "reliable-macaca-slave"
-  links:
-    - reliable-master:reliable-master
-  volumes:
-    - /etc/localtime:/etc/localtime:ro
-  command: /reliable-macaca-slave/bin/reliable-macaca-slave server -m reliable-master:8083 --verbose
-
