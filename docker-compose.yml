@@ -1,6 +1,6 @@
 reliable-master:
   container_name: "reliable-master"
-  restart: "UNLESS-STOP"
+  restart: "unless-stopped"
   image: reliable-master
   ports:
     - "${RELIABLE_MASTER_PORT}:${RELIABLE_MASTER_PORT}"
